@@ -1,15 +1,20 @@
 package com.example.todoapp
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -26,7 +31,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -37,24 +44,32 @@ import java.util.Locale
 @Composable
 fun TodoListPage(viewModel: TodoViewModel){
 
+
+
     val todolist by viewModel.todoList.observeAsState()
     var inputText by remember { mutableStateOf("") }
 
-    Column (modifier = Modifier.fillMaxHeight().padding(8.dp).background(Color.White)){
+    Image(painter= painterResource(id= R.drawable.login_blur),
+        contentDescription="background",
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.Crop)
+
+    Column (modifier = Modifier.fillMaxHeight().padding(8.dp)){
+        Spacer(modifier = Modifier.height(40.dp))
         Row (modifier = Modifier.fillMaxWidth().padding(8.dp),
             horizontalArrangement = Arrangement.SpaceEvenly){
             OutlinedTextField(value = inputText,
                 onValueChange = { inputText = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, Color.Gray, RoundedCornerShape(16.dp)).weight(1f), // Border color, width, and shape
+                    .border(1.dp, Color.White, RoundedCornerShape(16.dp)).weight(1f), // Border color, width, and shape
                 placeholder = { Text("Enter task...") },
                 shape = RoundedCornerShape(16.dp) )
             IconButton(onClick = {
                 viewModel.addTodo(inputText)
                 inputText=""
             },) {
-                Icon(painterResource(id=R.drawable.baseline_add_circle_24), contentDescription = "add",tint= Color.DarkGray)
+                Icon(painterResource(id=R.drawable.baseline_add_circle_24), contentDescription = "add",tint= Color.White)
 
             }
         }
@@ -72,7 +87,7 @@ fun TodoListPage(viewModel: TodoViewModel){
             modifier= Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             text="No items yet",
-            color= Color.LightGray,
+            color= Color.White,
             fontSize = 16.sp)
 
     }
@@ -80,9 +95,15 @@ fun TodoListPage(viewModel: TodoViewModel){
 
 @Composable
 fun todoitem(item:Todo,onDelete:()-> Unit){
+    val brush= Brush.linearGradient(
+        listOf(
+            Color(0xFF238CDD),
+            Color(0XFF255DCC)
+        )
+    )
     Row (
         modifier = Modifier.fillMaxWidth()
-            .padding(8.dp).clip(RoundedCornerShape(16.dp)).background(Color.DarkGray).padding(16.dp),
+            .padding(8.dp).clip(RoundedCornerShape(16.dp)).background(brush, CircleShape).padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ){
         Column(
@@ -90,7 +111,7 @@ fun todoitem(item:Todo,onDelete:()-> Unit){
         ) {
             Text(text= SimpleDateFormat("HH:mm:aa, dd//mm", Locale.ENGLISH).format(item.Added),
                 fontSize = 12f.sp,
-                color = Color.LightGray)
+                color = Color.White)
             Text(text= item.Title,
                 fontSize = 20.sp,
                 color= Color.White)

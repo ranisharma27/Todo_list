@@ -11,6 +11,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 
 import com.example.todoapp.ui.theme.ToDoAppTheme
@@ -26,11 +28,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val navController= rememberNavController()
+
                     // Use the viewModel() function for Compose
                     val todoViewModel: TodoViewModel = viewModel()  // This line is the fix
-                    TodoListPage(todoViewModel)
+                    SetupNavGraph(navController = navController, todoViewModel = todoViewModel)
                 }
             }
         }
     }
 }
+
